@@ -14,6 +14,11 @@ app.listen(PORT, () => {
     console.log("Process started on port " + PORT)
 })
 
+// Express only serves static assets in production
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static("client/build"));
+  }
+
 app.get('/api/greeting', (req, res) => {
     const name = req.query.name || 'World';
     res.setHeader('Content-Type', 'application/json');
