@@ -6,9 +6,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js",
+    "start": "node index.js",
+    "startDev": "nodemon index.js",
     "startReact": "cd client && npm start",
-    "dev": "run-p start startReact",
+    "dev": "run-p startDev startReact",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "Kevin Patlis",
