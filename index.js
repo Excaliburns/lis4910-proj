@@ -25,33 +25,27 @@ app.get('/api/greeting', (req, res) => {
   res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
 });
 
-app.get('/api/menu', async (req, res) => {
-  console.log(`req came for menu! DAY: ${req.query.day}, WEEK: ${req.query.week}`);
+app.post('/api/menu', async (req, res) => {
+  console.log(`req came for menu!`);
 
-  const day = req.query.day;
-  const week = req.query.week
+  const day = req.query.date;
 
-  let foodItems;
-
-  if (typeof week === 'undefined') {
-    foodItems = await getFoodItemsForWeek(undefined, day);
-  }
-  else {
-    foodItems = await getFoodItemsForWeek(week, day);
-  }
+  let foodItems = await getFoodItemsForWeek(new Date(day));
 
   res.json(foodItems);
 })
 
 const pageUrl = 'https://menus.sodexomyway.com/BiteMenu/Menu?menuId=22663&locationId=40666001&whereami=http://seminoledining.sodexomyway.com/dining-locations/suwanneeroom';
-const datedPageUrl = pageUrl + 'startDate=';
 
-async function getFoodItemsForWeek(week, day) {
-  const weekMenuContent = await axios.get(week ? (datedPageUrl + (Date.now() * week)) : pageUrl);
+async function getFoodItemsForWeek(date) {
+  const datedPageUrl = pageUrl + '&startDate=' + date.toLocaleDateString();
+  const weekMenuContent = await axios.get(datedPageUrl);
+
+  console.log("getting menu for date: " + datedPageUrl)
 
   const $ = cheerio.load(weekMenuContent.data);
 
-  const currentDay = $('#menuid-' + (day ? day : new Date().getDate()) + '-day');
+  const currentDay = $('#menuid-' + date.getDay() + '-day');
 
   const menu = []
 

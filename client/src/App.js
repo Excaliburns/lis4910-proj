@@ -1,64 +1,44 @@
 import React from 'react';
-import _ from 'lodash';
+import DatePicker from 'react-datepicker';
 
-class Select extends React.Component {
-  constructor(props) {
-    super(props);
+import "react-datepicker/dist/react-datepicker.css"
 
-    this.state = {
-      value: 1
-    };
-  }
-
-  displayMenu(val) {
-    console.log(val);
-
-    this.props.onChange(val);
-    this.setState({value: val});
-  }
-
-  render() {
-    return (
-    <select style={{width: '250px'}} value={this.state.value} onChange={(event) => this.displayMenu(event.target.value)}>
-      {
-        _.range(1, 31).map(x => <option value={x} key={x}>{x}</option>)
-      }
-    </select>
-    )
-  }
-}
-
-async function getMenu(week, day) {
+async function getMenu(date) {
   let url = new URL('api/menu', window.location.href)
   let params = {
-                ...week && { week: week },
-                ...day  && { day: day}
+                ...date && { date: date }
                }
 
   url.search = new URLSearchParams(params).toString();
 
-  const resp = await fetch(url);
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
+    },
+    body: JSON.stringify( {date: date} )
+  });
   const json = await resp.json();
   return json;
 }
 
 class Display extends React.Component {
   
-  async selectChange(i) {
+  // accepts Date
+  async selectChange(date) {
+    console.log('requesting for: ' + date);
 
     this.setState({
       loading: true,
-      select: i,
+      selectedDate: date.toLocaleString(),
     });
 
-    const menu = getMenu(Math.floor(i / 7) + 1, i);
+    getMenu(date).then( (data) => {
+      console.log(data);
 
-    menu.then( result => {
-      this.menu = result;
-      this.setState({
-        loading: false
-      })
-    })
+      this.menu = data;
+      this.setState({ loading: false });
+    });
   }
   
   constructor(props) {
@@ -72,19 +52,21 @@ class Display extends React.Component {
     }
 
     this.state = {
-      select: 1,
+      selectedDate: new Date(),
       loading: true
     }
 
-    this.menu = this.selectChange(1);
+    this.menu = this.selectChange(new Date());
   }
 
   render () {
     return (
       <div>
         <div className="App" style={this.style}>
-          <Select 
-          onChange = {(i) => this.selectChange(i)}/>
+          <DatePicker
+           selected={ this.state.selectedDate }
+           onChange={date => this.selectChange(date)}>
+          </DatePicker>
         </div>
         <pre id='menu'>
           {
