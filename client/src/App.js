@@ -13,7 +13,7 @@ class Select extends React.Component {
   displayMenu(val) {
     console.log(val);
 
-    this.props.onHAAA(val);
+    this.props.onChange(val);
     this.setState({value: val});
   }
 
@@ -43,6 +43,24 @@ async function getMenu(week, day) {
 }
 
 class Display extends React.Component {
+  
+  async selectChange(i) {
+
+    this.setState({
+      loading: true,
+      select: i,
+    });
+
+    const menu = getMenu(Math.floor(i / 7) + 1, i);
+
+    menu.then( result => {
+      this.menu = result;
+      this.setState({
+        loading: false
+      })
+    })
+  }
+  
   constructor(props) {
     super(props);
 
@@ -53,23 +71,12 @@ class Display extends React.Component {
       alignItems: 'middle'
     }
 
-    this.menu = [];
-
     this.state = {
-      select: 1
+      select: 1,
+      loading: true
     }
-  }
 
-  async selectChange(i) {
-    const menu = await getMenu(null, i);
-
-    console.log(menu);
-
-    this.menu = menu;
-
-    this.setState({
-      select: i,
-    });
+    this.menu = this.selectChange(1);
   }
 
   render () {
@@ -77,9 +84,13 @@ class Display extends React.Component {
       <div>
         <div className="App" style={this.style}>
           <Select 
-          onHAAA = {(i) => this.selectChange(i)}/>
+          onChange = {(i) => this.selectChange(i)}/>
         </div>
-        <pre id='menu'>{JSON.stringify(this.menu, null, 2)}</pre>
+        <pre id='menu'>
+          {
+            this.state.loading ? 'loading...' : JSON.stringify(this.menu, null, 2)
+          }
+          </pre>
       </div>
     );
   }
