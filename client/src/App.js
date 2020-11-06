@@ -26,11 +26,11 @@ class Display extends React.Component {
   
   // accepts Date
   async selectChange(date) {
-    console.log('requesting for: ' + date);
+    console.log('requesting for: ' + date.toLocaleDateString());
 
     this.setState({
       loading: true,
-      selectedDate: date.toLocaleString(),
+      selectedDate: date,
     });
 
     getMenu(date).then( (data) => {
