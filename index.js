@@ -197,11 +197,6 @@ setupCache().then( result => {
   myCache.set('setupComplete', true);
 
   console.log('done initializing! cache is successfully setup.');
-  const lol = myCache.get('allFood');
-
-  console.log(lol.length)
-  const ayy = lol.filter(item => item.name.toLowerCase().includes('meatball'));
-  console.log(ayy)
 });
 
 // When we initialize, load cache with data for today + 2 weeks - 1d

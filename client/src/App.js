@@ -64,7 +64,7 @@ class Display extends React.Component {
       }
       else {
         this.menu = menuResponse;
-        this.setState({ loading: false });
+        this.setState({ started: false, loading: false });
       }
     });
   }
@@ -74,7 +74,8 @@ class Display extends React.Component {
 
     this.state = {
       selectedDate: new Date(),
-      loading: true
+      loading: true,
+      started: false
     }
 
     this.getFoodTypeaheadData().then (
@@ -90,8 +91,8 @@ class Display extends React.Component {
     return (
       <div>
         <div class="col text-center pt-3 font-weight-bold font-size-large" id="title">Welcome to FSU Dining!</div>
-        <div className="App pt-4 row">
-          <ConditionalTypeahead class="col-6 pl-5" isLoaded={(!this.state.loading)} food={this.state.food} />
+        <div className="App pt-4 row p-5">
+          <ConditionalTypeahead class="col-6 pl-5" isLoaded={(!this.state.started)} food={this.state.food} />
           <DatePicker
             selected={this.state.selectedDate}
             onChange={date => this.selectChange(date)}>
