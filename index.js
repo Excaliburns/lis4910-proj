@@ -42,7 +42,7 @@ app.post('/api/menu', async (req, res) => {
   else {
     res.status(503).send();
   }
-})
+});
 
 app.get('/api/allFood', (req, res) => {
   console.log('Typeahead needs some data...');
@@ -53,7 +53,38 @@ app.get('/api/allFood', (req, res) => {
   else {
     res.send({});
   }
-})
+});
+
+app.get('/api/searchFood', (req, res) => {
+  let search = req.query.food.toLowerCase();
+
+  console.log('Searching menu... for: ' + search);
+  let returnedFoodList = {}
+
+  if (myCache.has('allFood')) {
+    let foodItems = myCache.get('allFood').filter (item => item.name.toLowerCase().includes(search));
+
+    foodItems.forEach(element => {
+      let dates = element.date;
+      let simplifiedElement = { name: element.name, descriptors: element.descriptors }
+
+      dates.forEach( date => {
+          let meals = element.meal;
+          
+          returnedFoodList[date] = new Map();
+
+           meals.forEach( meal => {
+             returnedFoodList[date][meal] = { ...returnedFoodList[date][meal], ...simplifiedElement }
+           })
+            
+          return true;
+      })
+    });    
+  }
+
+  returnedFoodList['type'] = 'dated';
+  res.send(returnedFoodList);
+});
 
 const pageUrl = 'https://menus.sodexomyway.com/BiteMenu/MenuOnly?menuId=22663&locationId=40666001&whereami=http://seminoledining.sodexomyway.com/dining-locations/suwanneeroom';
 
@@ -78,7 +109,7 @@ async function getFoodItemsForWeek(date) {
   
     const currentDay = $('#menuid-' + date.getDate() + '-day');
   
-    const menu = []
+    const menu = {'type': 'list', 'menu': []}
     let allFood = []
   
     currentDay.find('.accordion-block').each((index, element) => {
@@ -155,7 +186,7 @@ async function getFoodItemsForWeek(date) {
   
               mealItems.push(
                 {
-                  name: $(itemElement).text(),
+                  name: $(itemElement).text().replace(/\s+/g,' ').trim(),
                   meal: mealTitle,
                   date: dateString,
                   // Really not a fan of this, but when you load the page it will generate random ids for each menu item
@@ -180,7 +211,7 @@ async function getFoodItemsForWeek(date) {
       }
       
       
-      menu.push({
+      menu['menu'].push({
         'mealTitle': mealTitle,
         'mealItems': mealItems
       });
@@ -194,6 +225,36 @@ async function getFoodItemsForWeek(date) {
 }
 
 setupCache().then( result => {
+  const foodCache = myCache.get('allFood');
+
+  const seenItems = new Map();
+  
+  // Remove duplicate food entries and merge their dates, this is mostly for typeahead to get data
+  let newFoodCache = foodCache.filter ( (entry) => {
+    let previous;
+
+    if (seenItems.hasOwnProperty(entry.name)) {
+        previous = seenItems[entry.name];
+        previous.date.push(entry.date)
+        previous.meal.push(entry.meal)
+
+        return false;
+      }
+
+      if (!Array.isArray(entry.date)) {
+        entry.date = [entry.date];
+      }
+
+      if (!Array.isArray(entry.meal)) {
+        entry.meal = [entry.meal];
+      }
+
+      seenItems[entry.name] = entry;
+
+      return true;
+  })
+
+  myCache.set('allFood', newFoodCache)
   myCache.set('setupComplete', true);
 
   console.log('done initializing! cache is successfully setup.');
