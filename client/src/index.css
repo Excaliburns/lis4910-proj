@@ -54,6 +54,10 @@ body::-webkit-scrollbar-thumb {
   background: rgb(248, 139, 248);
 }
 
+#menu {
+  overflow-y: auto;
+}
+
 #menu::-webkit-scrollbar {
   width: .25rem;
 }

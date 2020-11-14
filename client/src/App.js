@@ -226,8 +226,9 @@ function DatedMeal(props) {
 function DatedFood(props) {
   if (props.foods) {
     const keys   = Object.keys(props.foods);
-    const last   = keys.pop();
-    const result = keys.join(', ') + ' & ' + last;
+    const first  = keys.slice(0, keys.length - 1);
+    const last   = keys[keys.length - 1];
+    const result = keys.length > 1 ? (first.join(', ') + ' & ' + last) : keys[0];
     return (
       <div className="pt-1">
         <p className="m-0">{result}</p>
