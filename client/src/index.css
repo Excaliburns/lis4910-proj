@@ -7,6 +7,10 @@
   sans-serif;
 }
 
+.base-font {
+  font-family: 'Open Sans'
+}
+
 .bars {
   display: flex;
   justify-content: space-between;
@@ -32,4 +36,36 @@
 .react-datepicker__input-container input {
   height: 100%;
   width: 100%;
+}
+
+.meal {
+  height: 500px;
+}
+
+body::-webkit-scrollbar {
+  width: .25rem;
+}
+
+body::-webkit-scrollbar-track {
+  background: black;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: rgb(248, 139, 248);
+}
+
+#menu {
+  overflow-y: scroll;
+}
+
+#menu::-webkit-scrollbar {
+  width: .25rem;
+}
+
+#menu::-webkit-scrollbar-track {
+  background: grey;
+}
+
+#menu::-webkit-scrollbar-thumb {
+  background: rgb(248, 139, 248);
 }

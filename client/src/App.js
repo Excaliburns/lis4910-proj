@@ -91,18 +91,20 @@ class Display extends React.Component {
     return (
       <div>
         <div class="col text-center pt-3 font-weight-bold font-size-large" id="title">Welcome to FSU Dining!</div>
-        <div className="App pt-4 row p-5">
-          <ConditionalTypeahead class="col-6 pl-5" isLoaded={(!this.state.started)} food={this.state.food} />
-          <DatePicker
-            selected={this.state.selectedDate}
-            onChange={date => this.selectChange(date)}>
-          </DatePicker>
+        <div className="p-5">
+          <div className="App pt-4 row">
+            <ConditionalTypeahead class="col-6" isLoaded={(!this.state.started)} food={this.state.food} />
+            <DatePicker
+              selected={this.state.selectedDate}
+              onChange={date => this.selectChange(date)}>
+            </DatePicker>
+          </div>
+          <div id='menu'>
+            {
+              this.state.loading ? this.state.loadingText : <FoodList foodList={this.menu}/>
+            }
+          </div>
         </div>
-        <pre id='menu' className="p-5">
-          {
-            this.state.loading ? this.state.loadingText : JSON.stringify(this.menu, null, 2)
-          }
-        </pre>
       </div>
     );
   }
@@ -128,6 +130,54 @@ function App() {
   return (
     <Display />
   )
+}
+
+function FoodList(props) {
+  if (props.foodList) {
+    return (
+      <div className="col-6 offset-3 meal">
+        <FoodMeal foodMeals={props.foodList}></FoodMeal>
+      </div>
+    )
+  }
+
+  return null;
+}
+
+function FoodMeal(props) {
+  if (props.foodMeals) {
+    let meals = [];
+
+    for (let i = 0; i < props.foodMeals.length; i++) {
+      meals.push(
+        <div className="pt-4 base-font">
+          <h2>{props.foodMeals[i].mealTitle}</h2>
+          <FoodItem foodItems={props.foodMeals[i].mealItems}/>
+        </div>
+      )
+    }
+
+    return <div>{meals}</div>;
+  }
+
+  return null;
+}
+
+
+function FoodItem(props) {
+  if (props.foodItems) {
+    let items = [];
+
+    for (let i = 0; i < props.foodItems.length; i++) {
+      items.push (
+      <div className="pt-2">{props.foodItems[i].name}</div>
+      )
+    }
+
+  return <div>{items}</div>;
+  }
+
+  return null;
 }
 
 export default App;
