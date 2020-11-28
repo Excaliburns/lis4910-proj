@@ -2,6 +2,9 @@
   "name": "lisnew",
   "version": "1.0.0",
   "description": "fsufood",
+  "engines" : {
+    "node": "15.x"
+  },
   "private": true,
   "main": "index.js",
   "scripts": {
