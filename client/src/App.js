@@ -32,7 +32,7 @@ const AuthStateApp = () => {
     return (
       <div className="App">
           <div>
-            <MainContent authState={authState}> </MainContent>
+            ;[]\<MainContent authState={authState}> </MainContent>
           </div>
       </div>
   );
