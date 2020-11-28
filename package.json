@@ -1,0 +1,28 @@
+{
+  "name": "lisnew",
+  "version": "1.0.0",
+  "description": "fsufood",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "startDev": "nodemon index.js",
+    "startReact": "cd client && npm start",
+    "dev": "run-p startDev startReact",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "author": "Kevin Patlis",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "cheerio": "^1.0.0-rc.3",
+    "express": "^4.17.1",
+    "node-cache": "^5.1.2",
+    "run-p": "0.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6",
+    "npm-run-all": "^4.1.5"
+  }
+}

@@ -1,0 +1,57 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+client/.vscode
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+client/node_modules
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+#amplify
+client/amplify/\#current-cloud-backend
+client/amplify/.config/local-*
+client/amplify/mock-data
+client/amplify/backend/amplify-meta.json
+client/amplify/backend/awscloudformation
+client/build/
+client/dist/
+client/node_modules/
+client/aws-exports.js
+client/awsconfiguration.json
+client/amplifyconfiguration.json
+client/amplify-build-config.json
+client/amplify-gradle-config.json
+client/amplifytools.xcconfig
+
+client/src/amplify/\#current-cloud-backend
+client/src/amplify/.config/local-*
+client/src/amplify/mock-data
+client/src/amplify/backend/amplify-meta.json
+client/src/amplify/backend/awscloudformation
+client/src/build/
+client/src/dist/
+client/src/node_modules/
+client/src/aws-exports.js
+client/src/awsconfiguration.json
+client/src/amplifyconfiguration.json
+client/src/amplify-build-config.json
+client/src/amplify-gradle-config.json
+client/src/amplifytools.xcconfig
