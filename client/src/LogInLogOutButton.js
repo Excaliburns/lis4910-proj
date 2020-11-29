@@ -1,52 +1,26 @@
-import React, { useState } from 'react';
-import { Auth } from 'aws-amplify';
+import React from 'react';
 import { AuthState } from '@aws-amplify/ui-components';
 
-import Modal from 'react-bootstrap/Modal';
-import SigninFlow from './SigninFlow';
+import LogOutDropdown from './LogOutDropdown';
+import LogInModal from './LogInModal';
 
-async function handleSignOut() {
-    await Auth.currentAuthenticatedUser().then(user => user.signOut());
-}
+class LogInLogOutButton extends React.Component {
 
-function signOutAndRefresh() {
-    handleSignOut().then( () => {
-        window.location.reload(false);
-    });
-}
+    gotoUserProfile = () => {
+        this.props.gotoUserProfile();
+    }
 
-
-const LogInLogOutButton = ({authState}) => {
-    console.log(authState)
-    return authState === AuthState.SignedIn ? (
-        <div className="header text-right pr-5 pt-4 font-weight-bold" onClick={signOutAndRefresh}> Log Out</div>     
-    ) : (
-        LogInModal()
-    )
-}
-
-
-function LogInModal() {
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
-    return (
-        <div>
-            <div className="header text-right pr-5 pt-4 font-weight-bold" onClick={handleShow}>Log In</div>
-
-            <Modal show={show}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Log In</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <SigninFlow />
-                </Modal.Body>
-            </Modal>
-        </div>
-    );
-
+    render() {
+        return this.props.authState === AuthState.SignedIn ? (
+            <div className="d-flex pr-5 pt-4 logoutDropdownButton">
+                <LogOutDropdown gotoUserProfile={this.gotoUserProfile} />
+            </div>
+        ) : (
+            <div className="pr-5 pt-4">
+                 <LogInModal />
+            </div>
+        )
+    }
 }
 
 export default LogInLogOutButton;

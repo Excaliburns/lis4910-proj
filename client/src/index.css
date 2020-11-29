@@ -7,6 +7,10 @@
   sans-serif;
 }
 
+amplify-authenticator {
+  --container-height: 0;
+}
+
 .base-font {
   font-family: 'Open Sans'
 }
@@ -81,4 +85,17 @@ body::-webkit-scrollbar-thumb {
 .break-flex {
   flex-basis: 100%;
   height: 0;
+}
+
+.logoutDropdownButton {
+  justify-content: flex-end;
+}
+
+.auth-container {
+  min-height: auto !important;
+}
+
+.centerDiv {
+  margin: auto;
+  width: 50%;
 }
