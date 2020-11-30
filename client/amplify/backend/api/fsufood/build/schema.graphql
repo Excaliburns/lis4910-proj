@@ -1,6 +1,5 @@
-type User {
+type Preference {
   id: ID!
-  name: String!
   preferences: [String]
   allergies: [String]
   createdAt: AWSDateTime!
@@ -12,8 +11,8 @@ enum ModelSortDirection {
   DESC
 }
 
-type ModelUserConnection {
-  items: [User]
+type ModelPreferenceConnection {
+  items: [Preference]
   nextToken: String
 }
 
@@ -90,14 +89,13 @@ input ModelSizeInput {
   between: [Int]
 }
 
-input ModelUserFilterInput {
+input ModelPreferenceFilterInput {
   id: ModelIDInput
-  name: ModelStringInput
   preferences: ModelStringInput
   allergies: ModelStringInput
-  and: [ModelUserFilterInput]
-  or: [ModelUserFilterInput]
-  not: ModelUserFilterInput
+  and: [ModelPreferenceFilterInput]
+  or: [ModelPreferenceFilterInput]
+  not: ModelPreferenceFilterInput
 }
 
 enum ModelAttributeTypes {
@@ -114,45 +112,42 @@ enum ModelAttributeTypes {
 }
 
 type Query {
-  getUser(id: ID!): User
-  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
+  getPreference(id: ID!): Preference
+  listPreferences(filter: ModelPreferenceFilterInput, limit: Int, nextToken: String): ModelPreferenceConnection
 }
 
-input CreateUserInput {
+input CreatePreferenceInput {
   id: ID
-  name: String!
   preferences: [String]
   allergies: [String]
 }
 
-input UpdateUserInput {
+input UpdatePreferenceInput {
   id: ID!
-  name: String
   preferences: [String]
   allergies: [String]
 }
 
-input DeleteUserInput {
+input DeletePreferenceInput {
   id: ID
 }
 
 type Mutation {
-  createUser(input: CreateUserInput!, condition: ModelUserConditionInput): User
-  updateUser(input: UpdateUserInput!, condition: ModelUserConditionInput): User
-  deleteUser(input: DeleteUserInput!, condition: ModelUserConditionInput): User
+  createPreference(input: CreatePreferenceInput!, condition: ModelPreferenceConditionInput): Preference
+  updatePreference(input: UpdatePreferenceInput!, condition: ModelPreferenceConditionInput): Preference
+  deletePreference(input: DeletePreferenceInput!, condition: ModelPreferenceConditionInput): Preference
 }
 
-input ModelUserConditionInput {
-  name: ModelStringInput
+input ModelPreferenceConditionInput {
   preferences: ModelStringInput
   allergies: ModelStringInput
-  and: [ModelUserConditionInput]
-  or: [ModelUserConditionInput]
-  not: ModelUserConditionInput
+  and: [ModelPreferenceConditionInput]
+  or: [ModelPreferenceConditionInput]
+  not: ModelPreferenceConditionInput
 }
 
 type Subscription {
-  onCreateUser: User @aws_subscribe(mutations: ["createUser"])
-  onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
-  onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
+  onCreatePreference: Preference @aws_subscribe(mutations: ["createPreference"])
+  onUpdatePreference: Preference @aws_subscribe(mutations: ["updatePreference"])
+  onDeletePreference: Preference @aws_subscribe(mutations: ["deletePreference"])
 }

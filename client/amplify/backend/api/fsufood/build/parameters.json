@@ -4,5 +4,5 @@
     "DynamoDBBillingMode": "PAY_PER_REQUEST",
     "DynamoDBEnableServerSideEncryption": false,
     "S3DeploymentBucket": "amplify-fsufood-dev-51006-deployment",
-    "S3DeploymentRootKey": "amplify-appsync-files/2fe0b894b0eae202197112f341379eb5961efc13"
+    "S3DeploymentRootKey": "amplify-appsync-files/688b27f05dba05c3206e145588559392f4311c9f"
 }

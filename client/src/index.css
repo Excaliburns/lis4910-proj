@@ -7,6 +7,40 @@
   sans-serif;
 }
 
+html, body {
+  height: 100%;
+  color: black;
+}
+
+#dropdown-custom {
+  background-color:rgba(205, 192, 146);
+  border-color: rgba(205, 192, 146);
+  color: #540115;
+}
+
+#logInButton {
+  background-color: rgba(205, 192, 146);
+  color: #540115;
+}
+
+#mainPageLogo {
+  width: 8%;
+  height: auto;
+  position: absolute;
+}
+
+#mainPageHeader {
+	top:0;
+	left:0;
+	width:100%;
+	justify-content:space-between;
+	background:#540115;
+	align-items:center;
+	transition:0.6s;
+	padding:20px 50px;
+	z-index:1;
+}
+
 amplify-authenticator {
   --container-height: 0;
 }
@@ -22,15 +56,6 @@ amplify-authenticator {
 
 .font-size-large {
   font-size: 2rem;
-}
-
-.react-datepicker-wrapper {
-  position: relative;
-  flex: 0 0 48.5%;
-  max-width: 50%;
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
 }
 
 .react-datepicker__input-container {
@@ -55,23 +80,36 @@ body::-webkit-scrollbar-track {
 }
 
 body::-webkit-scrollbar-thumb {
-  background: rgb(248, 139, 248);
+  background: rgb(107, 101, 77) !important;
 }
 
-#menu {
+.menu {
   overflow-y: auto;
+  background-color: rgba(205, 192, 146);
+  min-height: 1vh;
 }
 
-#menu::-webkit-scrollbar {
+.form-control {
+  background-color: rgba(205, 192, 146) !important;
+  border: 5px solid #540115 !important;
+  border-radius: 2px !important;
+  height: auto !important;
+}
+
+.background-gold {
+  background-color: rgba(205, 192, 146) !important;
+}
+
+.menu::-webkit-scrollbar {
   width: .25rem;
 }
 
-#menu::-webkit-scrollbar-track {
+.menu::-webkit-scrollbar-track {
   background: grey;
 }
 
-#menu::-webkit-scrollbar-thumb {
-  background: rgb(248, 139, 248);
+.menu::-webkit-scrollbar-thumb {
+  background: rgb(107, 101, 77) !important;
 }
 
 .datedDayTitle {
@@ -98,4 +136,36 @@ body::-webkit-scrollbar-thumb {
 .centerDiv {
   margin: auto;
   width: 50%;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.gold-text {
+  color:rgba(205, 192, 146);
+}
+
+.garnet-border {
+  border: 5px solid #540115;
+  border-radius: 4px;
+}
+
+input .react-datepicker-ignore-onclickoutside {
+  background-color: rgba(205, 192, 146);
+  border: 5px solid #540115 !important;
+  border-radius: 2px !important;
+}
+
+.height-90 {
+  height: 90% !important;
+}
+
+.dropdown-item , .dropdown-menu {
+  background-color: rgba(205, 192, 146) !important;
+}
+
+.copyright-text {
+  font-size: .75rem;
+  margin-top: 15rem;
 }

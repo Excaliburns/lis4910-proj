@@ -1,14 +1,13 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createUser = /* GraphQL */ `
-  mutation CreateUser(
-    $input: CreateUserInput!
-    $condition: ModelUserConditionInput
+export const createPreference = /* GraphQL */ `
+  mutation CreatePreference(
+    $input: CreatePreferenceInput!
+    $condition: ModelPreferenceConditionInput
   ) {
-    createUser(input: $input, condition: $condition) {
+    createPreference(input: $input, condition: $condition) {
       id
-      name
       preferences
       allergies
       createdAt
@@ -16,14 +15,13 @@ export const createUser = /* GraphQL */ `
     }
   }
 `;
-export const updateUser = /* GraphQL */ `
-  mutation UpdateUser(
-    $input: UpdateUserInput!
-    $condition: ModelUserConditionInput
+export const updatePreference = /* GraphQL */ `
+  mutation UpdatePreference(
+    $input: UpdatePreferenceInput!
+    $condition: ModelPreferenceConditionInput
   ) {
-    updateUser(input: $input, condition: $condition) {
+    updatePreference(input: $input, condition: $condition) {
       id
-      name
       preferences
       allergies
       createdAt
@@ -31,14 +29,13 @@ export const updateUser = /* GraphQL */ `
     }
   }
 `;
-export const deleteUser = /* GraphQL */ `
-  mutation DeleteUser(
-    $input: DeleteUserInput!
-    $condition: ModelUserConditionInput
+export const deletePreference = /* GraphQL */ `
+  mutation DeletePreference(
+    $input: DeletePreferenceInput!
+    $condition: ModelPreferenceConditionInput
   ) {
-    deleteUser(input: $input, condition: $condition) {
+    deletePreference(input: $input, condition: $condition) {
       id
-      name
       preferences
       allergies
       createdAt

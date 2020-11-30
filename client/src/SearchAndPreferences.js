@@ -6,6 +6,7 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import Spinner from 'react-bootstrap/Spinner';
 import { AuthState } from '@aws-amplify/ui-components';
 import PreferencesMenu from './PreferencesMenu';
+import FilteredList from './FilteredList';
 
 function getMenu(date) {
     let url = new URL('api/menu', window.location.href)
@@ -39,30 +40,35 @@ function getMenu(date) {
 function getFoodTypeaheadData() {
     const parseJson = async response => {
         const text = await response.text()
-        try{
-          const json = JSON.parse(text)
-          return json
-        } catch(err) {
+        try {
+            const json = JSON.parse(text)
+            return json
+        } catch (err) {
             return [];
         }
-      }
+    }
 
     let url = new URL('api/allFood', window.location.href);
 
     return fetch(url)
         .then(response => parseJson(response))
-        .then(response => { 
-            if(response)  {return response}
-            else {return null }});
+        .then(response => {
+            if (response) { return response }
+            else { return null }
+        });
 }
 
 function searchForFood(food, filters, date) {
-    if (typeof food[0] === 'undefined') {
+    if (typeof food[0] === 'undefined' && filters === 'undefined') {
         return getMenu(date)
     }
     else {
-        console.log('fetching: api/searchFood?food=' + food[0].name);
-        let url = new URL('api/searchFood?food=' + food[0].name, window.location.href);
+        let url = new URL('api/searchFood', window.location.href);
+
+        if (food && food[0]) url.searchParams.append('food', food[0].name);
+        if (filters) url.searchParams.append('restrictions', filters);
+
+        console.log('fetching:' + url);
 
         return fetch(url)
             .then(response => response.json())
@@ -85,26 +91,31 @@ function SpinnerWithText(props) {
     )
 }
 
-function FoodList(props) {
+function FoodList(props, filters) {
     if (props.foodList) {
-        console.log(props.foodList)
+        console.log(props)
 
         if (props.foodList.type === 'list') {
             return (
-                <div className="col-8 offset-2 meal">
+                <div className="col-12 text-center meal">
                     <FoodMeal foodMeals={props.foodList.menu} key={'foodList'}></FoodMeal>
                 </div>
             )
         }
         else if (props.foodList.type === 'dated') {
+            console.log(props.foodList);
+
             return (
                 <div className="col-8 offset-2 meal">
                     <div className="mt-4 font-125">
-                        <span className="font-weight-bold font-125">{Object.values(Object.values(props.foodList)[0])[0].name}</span> will be available at <span className="font-weight-bold font-125">Seminole Cafe </span>on...
-            </div>
+                        <span className="font-weight-bold font-125">{Object.values(Object.values(props.foodList)[0])[0][0].name}</span> will be available at <span className="font-weight-bold font-125">Seminole Cafe </span>on...
+                     </div>
                     <DatedMeal foodMeals={props.foodList} key={'foodList'}></DatedMeal>
                 </div>
             )
+        }
+        else if (props.foodList.type === 'filtered') {
+            return <FilteredList filters={props.filters} foodList={props.foodList} />;
         }
     }
 
@@ -123,7 +134,7 @@ function DatedMeal(props) {
             const monthDayYearString = new Date(key).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
 
             days.push(
-                <div className="pt-3">
+                <div className="pt-3" key={'item' + key}>
                     <div>
                         <h5 className="font-weight-bold d-inline">{dayString}, </h5><h5 className="d-inline">{monthDayYearString}</h5>
                     </div>
@@ -160,7 +171,7 @@ function FoodMeal(props) {
         for (let i = 0; i < props.foodMeals.length; i++) {
             meals.push(
                 <div className="pt-4 base-font" key={'foodMeal' + i}>
-                    <h2>{props.foodMeals[i].mealTitle}</h2>
+                    <h1>{props.foodMeals[i].mealItems.length ? (props.foodMeals[i].mealTitle) : null}</h1>
                     <FoodItem foodItems={props.foodMeals[i].mealItems} />
                 </div>
             )
@@ -189,6 +200,12 @@ function FoodItem(props) {
     return null;
 }
 
+function getLocationHours(location) {
+    switch (location) {
+        case 'suwannee': return ( <div className="pt-5"> <div>9:30AM - 3:30PM</div><div>4:30PM - 9:30PM</div></div>)
+    }
+}
+
 class SearchAndPreferences extends React.Component {
     // accepts Date
     selectChange(date) {
@@ -207,7 +224,7 @@ class SearchAndPreferences extends React.Component {
                     loadingText: 'webserver is still initializing! give us a moment...'
                 })
 
-                setTimeout(() => {this.selectChange(date)}, 5000)
+                setTimeout(() => { this.selectChange(date) }, 5000)
             }
             else {
                 this.menu = menuResponse;
@@ -216,31 +233,49 @@ class SearchAndPreferences extends React.Component {
         });
     }
 
-    searchChange(selected) {
-        if (selected[0]) {  
-            this.setState({ loading: true, loadingText: 'loading....', selectedSearch: selected[0].name});
+    refreshMenu() {
+        this.setState({ loading: true, loadingText: 'loading....' });
+
+        if (this.state.selectedSearch.length || this.state.selectedRestrictions.length) {
+            searchForFood(this.state.selectedSearch, this.state.selectedRestrictions, this.state.selectedDate).then(
+                response => {
+                    this.menu = response;
+                    this.setState({ loading: false });
+                }
+            )
         }
         else {
-            this.setState({ loading: true, loadingText: 'loading....' });
+            this.selectChange(this.state.selectedDate)
         }
+    }
 
-        searchForFood(selected, null, this.state.selectedDate).then(
-            response => {
-                this.menu = response;
-                this.setState({ loading: false });
-            }
-        )
+    changeSelectedRestrictions(selected) {
+        this.setState( { selectedRestrictions: selected.map(each => each.replace('-Free', '') )}, () => this.refreshMenu());
+    }
+
+    changeSelectedSearch(selected) {
+        this.setState( { selectedSearch: selected }, () => this.refreshMenu());
+    }
+
+    getSelectedData() {
+        return {
+            selectedDate: this.state.selectedDate,
+            selectedSearch: this.state.selectedSearch
+        }
     }
 
     constructor(props) {
         super(props);
 
         this.state = {
+            authState: '',
             selectedDate: new Date(),
             selectedSearch: '',
+            selectedRestrictions: [],
             loading: true,
             started: false,
-            food: [new Map()]
+            food: [new Map()],
+            location: 'suwannee'
         }
 
         getFoodTypeaheadData().then(
@@ -253,45 +288,51 @@ class SearchAndPreferences extends React.Component {
     render() {
         return (
             <div className="p-5">
-                <div className="pt-4 row">
+                <div className="pt-4 row justify-content-center">
                     <Typeahead
                         id="foodTypeahead"
-                        className="col-3"
+                        className="col-5 background-gold pb-1"
                         labelKey="name"
                         placeholder="Search your favorite foods here..."
                         isLoaded={(!this.state.started)}
-                        onChange={selected => this.searchChange(selected)}
+                        onChange={selected => this.changeSelectedSearch(selected)}
                         options={this.state.food}>
                     </Typeahead>
                     <Typeahead
+                        clearButton
                         id="dietaryTypeahead"
-                        className="col-3"
-                        placeHolder="Dietary restrictions?"
+                        className="col-4 background-gold"
+                        multiple
+                        placeholder="Dietary restrictions?"
                         isLoaded={(!this.state.started)}
-                        onChange={selected => this.searchChange(selected)}
+                        onChange={selected => this.changeSelectedRestrictions(selected)}
                         options={dietaryRestrictions}>
                     </Typeahead>
                     <DatePicker
+                        className="background-gold garnet-border height-90"
                         selected={this.state.selectedDate}
                         onChange={date => this.selectChange(date)}>
                     </DatePicker>
                 </div>
-                <div className="row mt-3" style={{ margin: 'auto' }}>
-                    <div className="col-3 border">
-                        Hours of Operation
-              </div>
-                    <div id='menu' className={"border" + this.props.authState === AuthState.SignedIn ? 'col-6' : 'col-9'} >
+                <div className="row mt-3 justify-content-center">
+                    <div className="col-2 garnet-border mr-5 background-gold">
+                        <div className="text-center font-weight-bold pt-3">
+                            Hours of Operation
+                            {getLocationHours(this.state.location)}
+                        </div>
+                    </div>
+                    <div className={'menu garnet-border mx-5 ' + (this.props.authState === AuthState.SignedIn ? 'col-5' : 'col-8')} >
                         {
-                            this.state.loading ? <SpinnerWithText text={this.state.loadingText} /> : <FoodList foodList={this.menu} />
+                            this.state.loading ? <SpinnerWithText text={this.state.loadingText} /> : <FoodList foodList={this.menu} filters={this.state.selectedRestrictions}/>
                         }
                     </div>
-                    <PreferencesMenu />
+                    <PreferencesMenu authState={this.props.authState}/>
                 </div>
             </div>
         )
     }
 }
 
-const dietaryRestrictions = [ 'Milk', 'Tree Nuts', 'Wheat', 'Gluten', 'Eggs', 'Fish', 'Peanuts', 'Shellfish', 'Soy', 'Mindful (low cal)', 'Vegan', 'Vegetarian' ]
+const dietaryRestrictions = ['Milk-Free', 'Tree Nuts-Free', 'Wheat-Free', 'Gluten-Free', 'Egg-Free', 'Fish-Free', 'Peanuts-Free', 'Shellfish-Free', 'Soy-Free', 'Mindful', 'Vegan', 'Vegetarian']
 
 export default SearchAndPreferences;

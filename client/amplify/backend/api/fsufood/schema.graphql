@@ -1,6 +1,5 @@
-type User @model {
+type Preference @model {
   id: ID!
-  name: String!
   preferences: [String]
   allergies: [String]
 }

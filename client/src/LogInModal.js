@@ -17,8 +17,8 @@ class LogInModal extends React.Component {
 
     render() {
         return (
-            <div onClick={e => e.stopPropagation()}>
-                <div className="header text-right font-weight-bold" onClick={this.handleShow}>Log In</div>
+            <div className="d-flex justify-content-end">
+                <div id="logInButton" className="header text-right font-weight-bold btn" onClick={this.handleShow}>Log In</div>
 
                 <Modal show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header closeButton>

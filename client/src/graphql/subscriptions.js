@@ -1,11 +1,10 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateUser = /* GraphQL */ `
-  subscription OnCreateUser {
-    onCreateUser {
+export const onCreatePreference = /* GraphQL */ `
+  subscription OnCreatePreference {
+    onCreatePreference {
       id
-      name
       preferences
       allergies
       createdAt
@@ -13,11 +12,10 @@ export const onCreateUser = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateUser = /* GraphQL */ `
-  subscription OnUpdateUser {
-    onUpdateUser {
+export const onUpdatePreference = /* GraphQL */ `
+  subscription OnUpdatePreference {
+    onUpdatePreference {
       id
-      name
       preferences
       allergies
       createdAt
@@ -25,11 +23,10 @@ export const onUpdateUser = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteUser = /* GraphQL */ `
-  subscription OnDeleteUser {
-    onDeleteUser {
+export const onDeletePreference = /* GraphQL */ `
+  subscription OnDeletePreference {
+    onDeletePreference {
       id
-      name
       preferences
       allergies
       createdAt

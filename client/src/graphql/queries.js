@@ -1,11 +1,10 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getUser = /* GraphQL */ `
-  query GetUser($id: ID!) {
-    getUser(id: $id) {
+export const getPreference = /* GraphQL */ `
+  query GetPreference($id: ID!) {
+    getPreference(id: $id) {
       id
-      name
       preferences
       allergies
       createdAt
@@ -13,16 +12,15 @@ export const getUser = /* GraphQL */ `
     }
   }
 `;
-export const listUsers = /* GraphQL */ `
-  query ListUsers(
-    $filter: ModelUserFilterInput
+export const listPreferences = /* GraphQL */ `
+  query ListPreferences(
+    $filter: ModelPreferenceFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listPreferences(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        name
         preferences
         allergies
         createdAt
