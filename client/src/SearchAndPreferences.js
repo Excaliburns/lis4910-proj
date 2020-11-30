@@ -108,7 +108,7 @@ function FoodList(props, filters) {
             return (
                 <div className="col-8 meal">
                     <div className="mt-4 font-125">
-                        <span className="font-weight-bold font-125">{Object.values(Object.values(props.foodList)[0])[0][0].name}</span> will be available at <span className="font-weight-bold font-125">Seminole Cafe </span>on...
+                        <span className="font-weight-bold font-125">{Object.values(Object.values(props.foodList)[0])[0][0].name}</span> will be available at <span className="font-weight-bold font-125">Suwannee Room </span>on...
                      </div>
                     <DatedMeal foodMeals={props.foodList} key={'foodList'}></DatedMeal>
                 </div>
