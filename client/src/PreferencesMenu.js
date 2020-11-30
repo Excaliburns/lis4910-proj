@@ -55,7 +55,7 @@ class PreferencesMenu extends React.Component {
 
     render() {
         return this.props.authState === AuthState.SignedIn ? (
-            <div className="menu col-2 offset-2 garnet-border text-center font-weight-bold pt-3 ml-5">
+            <div className="menu col-4 garnet-border text-center font-weight-bold pt-3 ml-5">
                 Some food options that match your preference for today:
 
                 <FilteredList foodList={this.state.menu} filters={collectFilters()} />

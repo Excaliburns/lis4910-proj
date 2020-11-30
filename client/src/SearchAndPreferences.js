@@ -106,7 +106,7 @@ function FoodList(props, filters) {
             console.log(props.foodList);
 
             return (
-                <div className="col-8 offset-2 meal">
+                <div className="col-8 meal">
                     <div className="mt-4 font-125">
                         <span className="font-weight-bold font-125">{Object.values(Object.values(props.foodList)[0])[0][0].name}</span> will be available at <span className="font-weight-bold font-125">Seminole Cafe </span>on...
                      </div>
@@ -321,7 +321,7 @@ class SearchAndPreferences extends React.Component {
                             {getLocationHours(this.state.location)}
                         </div>
                     </div>
-                    <div className={'menu garnet-border mx-5 ' + (this.props.authState === AuthState.SignedIn ? 'col-5' : 'col-8')} >
+                    <div className={'menu garnet-border ' + (this.props.authState === AuthState.SignedIn ? 'col-5' : 'col-6')} >
                         {
                             this.state.loading ? <SpinnerWithText text={this.state.loadingText} /> : <FoodList foodList={this.menu} filters={this.state.selectedRestrictions}/>
                         }
